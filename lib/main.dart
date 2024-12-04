@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/data/dummy_data.dart';
-import 'package:shopping_list/widgets/shopping_list_tile.dart';
+
+import 'package:shopping_list/widgets/shopping_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,17 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Shoppinggg!'),
-        ),
-        body: ListView(
-          children: [
-            for (final groceryItem in groceryItems)
-              ShoppingListTile(groceryItem: groceryItem)
-          ],
-        ),
-      ),
+      home: const ShoppingList(),
     );
   }
 }
