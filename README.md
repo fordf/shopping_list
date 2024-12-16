@@ -11,3 +11,8 @@ Most
 - `GlobalKey<FormState>`
 - `RichText`
 - `TextSpan`
+- `Future.wait`
+- environment variables
+- `Enum.values.byName`
+- `context.mounted` in async functions
+- when not to use `FutureBuilder`
