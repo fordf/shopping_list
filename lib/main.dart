@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:shopping_list/widgets/shopping_list.dart';
 
+const kRestUrl = String.fromEnvironment('REST_URL');
+
 void main() {
   runApp(const MyApp());
 }

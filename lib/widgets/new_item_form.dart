@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/main.dart';
 import 'package:shopping_list/models/category.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 
@@ -14,8 +18,13 @@ class _NewItemFormState extends State<NewItemForm> {
   late String _name;
   late int _quantity;
   Category? _category;
+  bool isSending = false;
   final formKey = GlobalKey<FormState>();
   final quantityController = TextEditingController(text: "1");
+  final shoppingListUrl = Uri.https(
+    kRestUrl,
+    'shopping-list.json',
+  );
 
   @override
   void dispose() {
@@ -23,17 +32,33 @@ class _NewItemFormState extends State<NewItemForm> {
     super.dispose();
   }
 
-  void submitForm() {
+  void submitForm() async {
     final formState = formKey.currentState!;
     if (formState.validate()) {
+      isSending = true;
       formState.save();
-      final newGroceryItem = GroceryItem(
-        id: UniqueKey().toString(),
-        name: _name,
-        quantity: _quantity,
-        category: _category!,
+      final groceryItemMap = {
+        "name": _name,
+        "quantity": _quantity,
+        "category": _category!.title,
+      };
+      final response = await http.post(
+        shoppingListUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(groceryItemMap),
       );
-      Navigator.pop(context, newGroceryItem);
+      if (!context.mounted) return;
+      if (response.statusCode == 200) {
+        groceryItemMap['id'] = json.decode(response.body)["name"];
+        final newGroceryItem = GroceryItem.fromJson(groceryItemMap);
+        Navigator.pop(context, newGroceryItem);
+      } else {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Failed to save...')));
+      }
     }
   }
 
@@ -134,16 +159,23 @@ class _NewItemFormState extends State<NewItemForm> {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {
-                      formKey.currentState!.reset();
-                      _category = null;
-                    },
+                    onPressed: isSending
+                        ? null
+                        : () {
+                            formKey.currentState!.reset();
+                            _category = null;
+                          },
                     child: const Text('Reset'),
                   ),
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: submitForm,
-                    child: const Text('Add item'),
+                    onPressed: isSending ? null : submitForm,
+                    child: isSending
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator())
+                        : const Text('Add item'),
                   )
                 ],
               ),

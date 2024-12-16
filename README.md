@@ -1,16 +1,13 @@
-# shopping_list
+# Shoppinggg!
 
-A new Flutter project.
+A shopping list. Maximilian Schwarzmuller made me do it. I paid him to make me do it. As part of my Flutter learning journey.
 
-## Getting Started
+Most
 
-This project is a starting point for a Flutter application.
+## Stuff I learned
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `Form`
+- `TextFormField`
+- `GlobalKey<FormState>`
+- `RichText`
+- `TextSpan`
